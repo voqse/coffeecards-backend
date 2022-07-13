@@ -1,0 +1,30 @@
+{
+  "name": "repeat-backend",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "./src/index.js",
+  "type": "module",
+  "scripts": {
+    "server": "node ./src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./src/index.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "keywords": [],
+  "author": "voqse",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "fastify": "^4.1.0",
+    "fastify-plugin": "^3.0.1",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.1"
+  },
+  "devDependencies": {
+    "jest": "^28.1.1",
+    "nodemon": "^2.0.18",
+    "prettier": "^2.7.1"
+  }
+}
