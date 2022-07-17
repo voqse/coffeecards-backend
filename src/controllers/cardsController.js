@@ -1,16 +1,26 @@
 export default async function cardsController(fastify) {
   // Implement list cards
-  fastify.get('/')
+  fastify.get('/', async (request, reply) => {
+    reply.send({ it: 'Works' })
+  })
 
   // Implement add card
-  fastify.post('/new')
+  fastify.post('/new', async (request, reply) => {
+    reply.send({ it: 'Works' })
+  })
 
   // Implement list one card
-  fastify.get('/:id')
+  fastify.get('/:id', async (request, reply) => {
+    reply.send({ it: 'Works' })
+  })
 
   // Implement edit card
-  fastify.put('/:id')
+  fastify.put('/:id', async (request, reply) => {
+    reply.send({ it: 'Works' })
+  })
 
   // Implement delete card
-  fastify.delete('/:id')
+  fastify.delete('/:id', async (request, reply) => {
+    reply.send({ it: 'Works' })
+  })
 }
