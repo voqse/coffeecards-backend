@@ -2,8 +2,15 @@ import fp from 'fastify-plugin'
 import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 
-async function authPlugin(fastify, options) {
-  const { secret = 'you-must-define-a-secret' } = options
+async function authPlugin(fastify, options = {}) {
+  const { secret, issuer } = options
+  const jwtOptions = {
+    issuer,
+  }
+
+  if (!secret) {
+    return new Error('You must define a secret')
+  }
 
   // fastify.decorate('auth', function (request, reply) {
   //   const { authorization } = request.headers
@@ -22,17 +29,19 @@ async function authPlugin(fastify, options) {
 
     const parts = authorization.split(' ')
     if (parts.length !== 2) {
-      throw new createError.BadRequestError()
+      throw new createError.Unauthorized()
     }
 
     const scheme = parts[0]
     const token = parts[1]
     if (!/^Bearer$/i.test(scheme)) {
-      throw new createError.BadRequestError()
+      throw new createError.Unauthorized()
     }
 
     try {
-      const decoded = await jwt.verify(token, secret)
+      const decoded = await jwt.verify(token, secret, jwtOptions)
+
+      // TODO: check if sub is valid mongoose.ObjectId
     } catch (error) {
       fastify.log.error(error)
       throw new createError.Unauthorized()
