@@ -2,9 +2,9 @@ import jwt from 'jsonwebtoken'
 
 function issueToken(options = {}) {
   const {
-    secret = process.env.JWT_SECRET || 'you-must-define-a-secret',
-    issuer = process.env.JWT_ISS || 'https://auth.example.com',
-    expiresIn = process.env.ACCESS_TOKEN_TTL || '15m',
+    secret = process.env.JWT_SECRET,
+    issuer = process.env.JWT_ISS,
+    expiresIn = process.env.ACCESS_TOKEN_TTL,
   } = options
 
   const payload = {
