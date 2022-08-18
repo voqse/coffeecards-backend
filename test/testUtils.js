@@ -2,33 +2,32 @@ import jwt from 'jsonwebtoken'
 
 function issueToken(options = {}) {
   const {
+    payload = {
+      email: 'validuser@voqse.com',
+      username: 'validuser',
+      name: 'Valid User',
+    },
     secret = process.env.JWT_SECRET,
     issuer = process.env.JWT_ISS,
     expiresIn = process.env.ACCESS_TOKEN_TTL,
+    subject = 'validuser_id',
   } = options
-
-  const payload = {
-    email: 'validuser@voqse.com',
-    username: 'validuser',
-    name: 'Valid User',
-  }
 
   return jwt.sign(payload, secret, {
     issuer,
     expiresIn,
-    subject: 'validuser_id',
+    subject,
   })
 }
 
 export function access(fastify, options = {}) {
-  const {
-    secret,
-    issuer,
-    expiresIn,
+  let { headers, ...jwtOptions } = options
+
+  if (!headers) {
     headers = {
-      Authorization: `Bearer ${issueToken({ secret, issuer, expiresIn })}`,
-    },
-  } = options
+      Authorization: `Bearer ${issueToken(jwtOptions)}`,
+    }
+  }
 
   return fastify.inject({
     method: 'GET',
