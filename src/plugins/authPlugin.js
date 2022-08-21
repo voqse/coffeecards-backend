@@ -9,15 +9,7 @@ async function authPlugin(fastify, options = {}) {
     return new Error('You must define a secret')
   }
 
-  // fastify.decorate('auth', function (request, reply) {
-  //   const { authorization } = request.headers
-  //
-  //   if (!authorization) {
-  //     return reply.send(new createError.Unauthorized('No authorization header'))
-  //   }
-  // })
-
-  let user
+  fastify.decorateRequest('user', null)
 
   fastify.addHook('onRequest', async (request, reply) => {
     const { authorization } = request.headers
@@ -38,7 +30,7 @@ async function authPlugin(fastify, options = {}) {
     }
 
     try {
-      user = await jwt.verify(token, secret, jwtOpts)
+      request.user = await jwt.verify(token, secret, jwtOpts) //?
 
       // TODO: check if sub is valid mongoose.ObjectId
     } catch (error) {
@@ -46,8 +38,6 @@ async function authPlugin(fastify, options = {}) {
       throw new createError.Unauthorized()
     }
   })
-
-  fastify.decorateRequest('user', user)
 }
 
 export default fp(authPlugin)

@@ -12,7 +12,7 @@ export function buildAuthHeaders(options = {}) {
     secret = process.env.JWT_SECRET,
     issuer = process.env.JWT_ISS,
     expiresIn = process.env.ACCESS_TOKEN_TTL,
-    subject = 'validuser_id', // this should be changed to correct ObjectId
+    subject = '6202e612e83a8281862bfd84', // this should be changed to correct ObjectId
   } = options
 
   const token = jwt.sign(payload, secret, {
