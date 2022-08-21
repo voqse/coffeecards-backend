@@ -1,6 +1,6 @@
 import buildServer from '../../src/server.js'
 import { clearMockData, insertMockData } from '../helpers/mockData.js'
-import { buildAuthHeaders } from '../helpers/testUtils.js'
+import { getAuthHeaders } from '../helpers/testUtils.js'
 
 const mongooseOpts = {
   uri: process.env.MONGODB_URI + '-test',
@@ -27,7 +27,7 @@ test('List all user cards', async () => {
   const { statusCode, body } = await server.inject({
     method: 'GET',
     url: '/cards',
-    headers: buildAuthHeaders(),
+    headers: getAuthHeaders(),
   })
   const data = JSON.parse(body)
 
@@ -40,7 +40,7 @@ test('List all user cards filtered by deck', async () => {
   const { statusCode, body } = await server.inject({
     method: 'GET',
     url: '/cards',
-    headers: buildAuthHeaders(),
+    headers: getAuthHeaders(),
     query: {
       deck: '62036476c2be0d3d427ad7cb',
     },

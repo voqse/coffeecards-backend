@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-export function buildAuthHeaders(options = {}) {
+export function getAuthHeaders(options = {}) {
   // TODO: That options also need to be simplified
   // Definition of default values with what access will be granted
   const {

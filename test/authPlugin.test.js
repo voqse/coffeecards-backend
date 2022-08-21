@@ -1,5 +1,5 @@
 import buildServer from '../src/server.js'
-import { buildAuthHeaders } from './helpers/testUtils.js'
+import { getAuthHeaders } from './helpers/testUtils.js'
 
 const mongooseOpts = {
   uri: process.env.MONGODB_URI + '-test',
@@ -26,7 +26,7 @@ test('Get 401 when invalid token', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
-    headers: buildAuthHeaders({ secret: 'invalid' }),
+    headers: getAuthHeaders({ secret: 'invalid' }),
   })
   expect(statusCode).toBe(401)
 })
@@ -35,7 +35,7 @@ test('Get 401 when token expired', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
-    headers: buildAuthHeaders({ expiresIn: '0s' }),
+    headers: getAuthHeaders({ expiresIn: '0s' }),
   })
   expect(statusCode).toBe(401)
 })
@@ -44,7 +44,7 @@ test('Get 401 when token issuer is wrong', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
-    headers: buildAuthHeaders({ issuer: 'https://wrong.example.com' }),
+    headers: getAuthHeaders({ issuer: 'https://wrong.example.com' }),
   })
   expect(statusCode).toBe(401)
 })
@@ -53,7 +53,7 @@ test('Get 401 is subject is not valid ObjectId', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
-    headers: buildAuthHeaders({ subject: '123' }),
+    headers: getAuthHeaders({ subject: '123' }),
   })
   expect(statusCode).toBe(401)
 })
@@ -62,7 +62,7 @@ test('Get 200 if token valid', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
-    headers: buildAuthHeaders(),
+    headers: getAuthHeaders(),
   })
   expect(statusCode).toBe(200)
 })
