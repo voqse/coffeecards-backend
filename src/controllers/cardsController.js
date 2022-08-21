@@ -1,3 +1,32 @@
+const cardItem = {
+  type: 'object',
+  properties: {
+    title: {
+      type: 'string',
+    },
+    definition: {
+      type: 'string',
+    },
+    deckIds: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+  },
+  required: ['title', 'definition', 'deckIds'],
+}
+
+const cardSchema = {
+  body: cardItem,
+  response: {
+    '2xx': cardItem,
+  },
+}
+
+// const registerOpts = { schema: loginSchema }
+// const loginOpts = { schema: loginSchema }
+
 export default async function cardsController(fastify) {
   const { Card } = fastify.mongoose.models
 
@@ -8,9 +37,10 @@ export default async function cardsController(fastify) {
 
   // Add card
   fastify.post('/new', async (request, reply) => {
+    const { deckIds } = request.body
     const newCard = new Card(request.body)
 
-    return newCard.save()
+    return reply.code(201).send(await newCard.save())
   })
 
   // Show one card

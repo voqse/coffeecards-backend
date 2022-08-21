@@ -1,5 +1,6 @@
 import buildServer from '../../src/server.js'
-import { access } from '../testUtils.js'
+import { access } from '../helpers/testUtils.js'
+import { insertMockData } from '../helpers/mockData.js'
 
 const mongooseOpts = {
   uri: process.env.MONGODB_URI + '-test',
@@ -10,6 +11,10 @@ beforeAll(async () => {
   await server.ready()
 })
 
+beforeEach(async () => {
+  await insertMockData(server.mongoose)
+})
+
 afterAll(async () => {
   await server.close()
 })
@@ -17,12 +22,13 @@ afterAll(async () => {
 test('List all user cards', async () => {
   const response = await access(server, '/cards')
 
-  response.body //?
   expect(response.statusCode).toBe(200)
 })
 
 test('List all user cards filtered by deck', async () => {
-  // todo
+  const response = await access(server, '/cards')
+
+  expect(response.statusCode).toBe(200)
 })
 
 test('List all user cards filtered by collection', async () => {

@@ -24,7 +24,7 @@ function issueToken(options = {}) {
 }
 
 export function access(fastify, url, options = {}) {
-  let { headers, ...jwtOptions } = options
+  let { headers, method = 'GET', ...jwtOptions } = options
 
   if (!headers) {
     headers = {
@@ -32,9 +32,5 @@ export function access(fastify, url, options = {}) {
     }
   }
 
-  return fastify.inject({
-    method: 'GET',
-    url,
-    headers,
-  })
+  return fastify.inject({ method, url, headers })
 }

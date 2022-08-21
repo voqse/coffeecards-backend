@@ -2,11 +2,11 @@ import mongoose from 'mongoose'
 
 const { Schema } = mongoose
 export const cardSchema = new Schema({
-  content: {
+  title: {
     type: String,
     required: true,
   },
-  description: {
+  definition: {
     type: String,
     required: true,
   },

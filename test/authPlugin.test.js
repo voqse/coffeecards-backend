@@ -1,5 +1,5 @@
-import { access } from './testUtils.js'
 import buildServer from '../src/server.js'
+import { access } from './helpers/testUtils.js'
 
 const mongooseOpts = {
   uri: process.env.MONGODB_URI + '-test',
