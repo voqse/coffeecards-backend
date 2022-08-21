@@ -49,6 +49,15 @@ test('Get 401 when token issuer is wrong', async () => {
   expect(statusCode).toBe(401)
 })
 
+test('Get 401 is subject is not valid ObjectId', async () => {
+  const { statusCode } = await server.inject({
+    method: 'GET',
+    url: '/cards',
+    headers: buildAuthHeaders({ subject: '123' }),
+  })
+  expect(statusCode).toBe(401)
+})
+
 test('Get 200 if token valid', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',

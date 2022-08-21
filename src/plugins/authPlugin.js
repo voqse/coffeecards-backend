@@ -1,6 +1,9 @@
 import fp from 'fastify-plugin'
 import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
+
+const { ObjectId } = mongoose.Types
 
 async function authPlugin(fastify, options = {}) {
   const { secret, ...jwtOpts } = options
@@ -31,10 +34,12 @@ async function authPlugin(fastify, options = {}) {
 
     try {
       request.user = await jwt.verify(token, secret, jwtOpts)
-
-      // TODO: check if sub is valid mongoose.ObjectId
     } catch (error) {
       fastify.log.error(error)
+      throw new createError.Unauthorized()
+    }
+
+    if (!ObjectId.isValid(request.user.sub)) {
       throw new createError.Unauthorized()
     }
   })

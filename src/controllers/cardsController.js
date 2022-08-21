@@ -49,7 +49,7 @@ export default async function cardsController(fastify) {
   fastify.post('/new', async (request, reply) => {
     const { sub: userId } = request.user
     const { deckIds } = request.body
-    const newCard = new Card(request.body)
+    const newCard = new Card({ ...request.body, userId })
 
     return reply.code(201).send(await newCard.save())
   })
@@ -57,14 +57,12 @@ export default async function cardsController(fastify) {
   // Show one card
   fastify.get('/:id', async (request, reply) => {
     const { sub: userId } = request.user
-
     return Card.findOne({ id: request.params.id, userId })
   })
 
   // Edit card
   fastify.put('/:id', async (request, reply) => {
     const { sub: userId } = request.user
-
     return Card.findOneAndUpdate(
       { id: request.params.id, userId },
       request.body,
@@ -74,7 +72,6 @@ export default async function cardsController(fastify) {
   // Delete card
   fastify.delete('/:id', async (request, reply) => {
     const { sub: userId } = request.user
-
     return Card.findOneAndRemove({ id: request.params.id, userId })
   })
 }
