@@ -15,4 +15,7 @@ afterAll(async () => {
 
 test('Fastify instance should contain mongoose', async () => {
   expect(server.mongoose).toBeDefined()
+  expect(server.mongoose.models.Card).toBeDefined()
+  expect(server.mongoose.models.Deck).toBeDefined()
+  expect(server.mongoose.models.Collection).toBeDefined()
 })

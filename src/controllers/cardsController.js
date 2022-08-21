@@ -1,27 +1,30 @@
 export default async function cardsController(fastify) {
-  // Implement list cards
+  const { Card } = fastify.mongoose.models
+
+  // List cards
   fastify.get('/', async (request, reply) => {
-    request.params //?
-    return reply.send({ it: 'Works' })
+    return Card.find()
   })
 
-  // Implement add card
+  // Add card
   fastify.post('/new', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const newCard = new Card(request.body)
+
+    return newCard.save()
   })
 
-  // Implement list one card
+  // Show one card
   fastify.get('/:id', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    return Card.findOne({ id: request.params.id })
   })
 
-  // Implement edit card
+  // Edit card
   fastify.put('/:id', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    return Card.findOneAndUpdate({ id: request.params.id }, request.body)
   })
 
-  // Implement delete card
+  // Delete card
   fastify.delete('/:id', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    return Card.findOneAndRemove({ id: request.params.id })
   })
 }
