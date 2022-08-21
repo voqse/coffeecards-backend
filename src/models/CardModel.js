@@ -31,6 +31,7 @@ export const cardSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: 'Deck',
+      required: true,
     },
   ],
 })

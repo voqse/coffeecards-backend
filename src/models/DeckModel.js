@@ -18,6 +18,7 @@ export const deckSchema = new Schema({
   collectionId: {
     type: Schema.Types.ObjectId,
     ref: 'Collection',
+    required: true,
   },
 })
 
