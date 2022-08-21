@@ -1,5 +1,5 @@
 import buildServer from '../../src/server.js'
-import { insertMockData } from '../helpers/mockData.js'
+import { clearMockData, insertMockData } from '../helpers/mockData.js'
 import { buildAuthHeaders } from '../helpers/testUtils.js'
 
 const mongooseOpts = {
@@ -15,6 +15,10 @@ beforeEach(async () => {
   await insertMockData(server.mongoose)
 })
 
+afterEach(async () => {
+  await clearMockData(server.mongoose)
+})
+
 afterAll(async () => {
   await server.close()
 })
@@ -26,6 +30,8 @@ test('List all user cards', async () => {
     headers: buildAuthHeaders(),
   })
   expect(statusCode).toBe(200)
+  // expect(typeof body).toBe('array')
+  // expect(body).toHaveLength(2)
 })
 
 test('List all user cards filtered by deck', async () => {
@@ -33,8 +39,14 @@ test('List all user cards filtered by deck', async () => {
     method: 'GET',
     url: '/cards',
     headers: buildAuthHeaders(),
+    query: {
+      deck: '62036476c2be0d3d427ad7cb',
+    },
   })
+
   expect(statusCode).toBe(200)
+  // expect(typeof body).toBe('array')
+  // expect(body).toHaveLength(2)
 })
 
 test('List all user cards filtered by collection', async () => {
