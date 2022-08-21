@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const { Schema } = mongoose
-const deckSchema = new Schema({
+export const deckSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -21,4 +21,4 @@ const deckSchema = new Schema({
   },
 })
 
-export default mongoose.model('Deck', deckSchema)
+// export default mongoose.model('Deck', deckSchema)

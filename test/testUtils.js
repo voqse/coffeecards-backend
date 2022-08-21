@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken'
 
+// TODO: Convert into a fastify plugin
 function issueToken(options = {}) {
+  // Definition of default values with what access will be granted
+  // TODO: That options also need to be simplified
   const {
     payload = {
       email: 'validuser@voqse.com',
@@ -10,7 +13,7 @@ function issueToken(options = {}) {
     secret = process.env.JWT_SECRET,
     issuer = process.env.JWT_ISS,
     expiresIn = process.env.ACCESS_TOKEN_TTL,
-    subject = 'validuser_id',
+    subject = 'validuser_id', // this should be changed to correct ObjectId
   } = options
 
   return jwt.sign(payload, secret, {
@@ -20,7 +23,7 @@ function issueToken(options = {}) {
   })
 }
 
-export function access(fastify, options = {}) {
+export function access(fastify, url, options = {}) {
   let { headers, ...jwtOptions } = options
 
   if (!headers) {
@@ -31,7 +34,7 @@ export function access(fastify, options = {}) {
 
   return fastify.inject({
     method: 'GET',
-    url: '/cards',
+    url,
     headers,
   })
 }

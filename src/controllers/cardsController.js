@@ -1,6 +1,7 @@
 export default async function cardsController(fastify) {
   // Implement list cards
   fastify.get('/', async (request, reply) => {
+    request.params //?
     return reply.send({ it: 'Works' })
   })
 

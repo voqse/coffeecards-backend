@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const { Schema } = mongoose
-const cardSchema = new Schema({
+export const cardSchema = new Schema({
   content: {
     type: String,
     required: true,
@@ -35,4 +35,4 @@ const cardSchema = new Schema({
   ],
 })
 
-export default mongoose.model('Card', cardSchema)
+// export default mongoose.model('Card', cardSchema)

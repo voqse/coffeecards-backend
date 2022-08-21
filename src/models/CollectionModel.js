@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const { Schema } = mongoose
-const collectionSchema = new Schema({
+export const collectionSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -17,4 +17,4 @@ const collectionSchema = new Schema({
   },
 })
 
-export default mongoose.model('Collection', collectionSchema)
+// export default mongoose.model('Collection', collectionSchema)
