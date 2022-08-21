@@ -27,7 +27,7 @@ export const cardSchema = new Schema({
     type: Number,
     default: 0,
   },
-  decks: [
+  deckIds: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Deck',

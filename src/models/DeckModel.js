@@ -15,7 +15,7 @@ export const deckSchema = new Schema({
     type: Date,
     default: () => Date.now(),
   },
-  collection: {
+  collectionId: {
     type: Schema.Types.ObjectId,
     ref: 'Collection',
   },
