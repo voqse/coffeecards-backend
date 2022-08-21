@@ -20,7 +20,7 @@ afterAll(async () => {
 })
 
 test('List all user cards', async () => {
-  const { statusCode, body } = server.inject({
+  const { statusCode, body } = await server.inject({
     method: 'GET',
     url: '/cards',
     headers: buildAuthHeaders(),
@@ -29,12 +29,12 @@ test('List all user cards', async () => {
 })
 
 test('List all user cards filtered by deck', async () => {
-  const { statusCode, body } = server.inject({
+  const { statusCode, body } = await server.inject({
     method: 'GET',
     url: '/cards',
     headers: buildAuthHeaders(),
   })
-  expect(response.statusCode).toBe(200)
+  expect(statusCode).toBe(200)
 })
 
 test('List all user cards filtered by collection', async () => {

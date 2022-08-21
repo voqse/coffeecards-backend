@@ -3,10 +3,7 @@ import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 
 async function authPlugin(fastify, options = {}) {
-  const { secret, issuer } = options
-  const jwtOptions = {
-    issuer,
-  }
+  const { secret, ...jwtOpts } = options
 
   if (!secret) {
     return new Error('You must define a secret')
@@ -41,7 +38,7 @@ async function authPlugin(fastify, options = {}) {
     }
 
     try {
-      user = await jwt.verify(token, secret, jwtOptions)
+      user = await jwt.verify(token, secret, jwtOpts)
 
       // TODO: check if sub is valid mongoose.ObjectId
     } catch (error) {

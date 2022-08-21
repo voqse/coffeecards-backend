@@ -15,7 +15,7 @@ afterAll(async () => {
 })
 
 test('Get 401 when no token', async () => {
-  const { statusCode } = server.inject({
+  const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
   })
@@ -23,7 +23,7 @@ test('Get 401 when no token', async () => {
 })
 
 test('Get 401 when invalid token', async () => {
-  const { statusCode } = server.inject({
+  const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
     headers: buildAuthHeaders({ secret: 'invalid' }),
@@ -32,7 +32,7 @@ test('Get 401 when invalid token', async () => {
 })
 
 test('Get 401 when token expired', async () => {
-  const { statusCode } = server.inject({
+  const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
     headers: buildAuthHeaders({ expiresIn: '0s' }),
@@ -41,7 +41,7 @@ test('Get 401 when token expired', async () => {
 })
 
 test('Get 401 when token issuer is wrong', async () => {
-  const { statusCode } = server.inject({
+  const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
     headers: buildAuthHeaders({ issuer: 'https://wrong.example.com' }),
@@ -50,7 +50,7 @@ test('Get 401 when token issuer is wrong', async () => {
 })
 
 test('Get 200 if token valid', async () => {
-  const { statusCode } = server.inject({
+  const { statusCode } = await server.inject({
     method: 'GET',
     url: '/cards',
     headers: buildAuthHeaders(),
