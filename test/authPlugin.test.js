@@ -49,29 +49,6 @@ test('Get 401 when token issuer is wrong', async () => {
   expect(statusCode).toBe(401)
 })
 
-// This tests below isn't independent TODO: Figure out how to test this
-// test('Get 401 when passing Auth Header with several tokens', async () => {
-//   const { statusCode } = await server.inject({
-//     method: 'GET',
-//     url: '/cards',
-//     headers: {
-//       Authorization: 'Bearer token1 token2',
-//     },
-//   })
-//   expect(statusCode).toBe(401)
-// })
-//
-// test('Get 401 when auth scheme is not Bearer', async () => {
-//   const { statusCode } = await server.inject({
-//     method: 'GET',
-//     url: '/cards',
-//     headers: {
-//       Authorization: 'Token token1',
-//     },
-//   })
-//   expect(statusCode).toBe(401)
-// })
-
 test('Get 200 if token valid', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',

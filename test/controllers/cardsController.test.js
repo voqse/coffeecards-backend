@@ -29,9 +29,11 @@ test('List all user cards', async () => {
     url: '/cards',
     headers: buildAuthHeaders(),
   })
+  const data = JSON.parse(body)
+
   expect(statusCode).toBe(200)
-  // expect(typeof body).toBe('array')
-  // expect(body).toHaveLength(2)
+  expect(Array.isArray(data)).toBeTruthy()
+  expect(data).toHaveLength(3)
 })
 
 test('List all user cards filtered by deck', async () => {
@@ -43,10 +45,11 @@ test('List all user cards filtered by deck', async () => {
       deck: '62036476c2be0d3d427ad7cb',
     },
   })
+  const data = JSON.parse(body)
 
   expect(statusCode).toBe(200)
-  // expect(typeof body).toBe('array')
-  // expect(body).toHaveLength(2)
+  expect(Array.isArray(data)).toBeTruthy()
+  expect(data).toHaveLength(2)
 })
 
 test('List all user cards filtered by collection', async () => {
