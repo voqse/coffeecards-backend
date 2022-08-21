@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 // TODO: Convert into a fastify plugin
-function issueToken(options = {}) {
+export function buildHeaders(options = {}) {
   // Definition of default values with what access will be granted
   // TODO: That options also need to be simplified
   const {
@@ -16,21 +16,13 @@ function issueToken(options = {}) {
     subject = 'validuser_id', // this should be changed to correct ObjectId
   } = options
 
-  return jwt.sign(payload, secret, {
+  const token = jwt.sign(payload, secret, {
     issuer,
     expiresIn,
     subject,
   })
-}
 
-export function access(fastify, url, options = {}) {
-  let { headers, method = 'GET', ...jwtOptions } = options
-
-  if (!headers) {
-    headers = {
-      Authorization: `Bearer ${issueToken(jwtOptions)}`,
-    }
+  return {
+    Authorization: `Bearer ${token}`,
   }
-
-  return fastify.inject({ method, url, headers })
 }
