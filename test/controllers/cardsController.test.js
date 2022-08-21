@@ -1,6 +1,6 @@
 import buildServer from '../../src/server.js'
 import { insertMockData } from '../helpers/mockData.js'
-import { buildHeaders } from '../helpers/testUtils.js'
+import { buildAuthHeaders } from '../helpers/testUtils.js'
 
 const mongooseOpts = {
   uri: process.env.MONGODB_URI + '-test',
@@ -23,7 +23,7 @@ test('List all user cards', async () => {
   const { statusCode, body } = server.inject({
     method: 'GET',
     url: '/cards',
-    headers: buildHeaders(),
+    headers: buildAuthHeaders(),
   })
   expect(statusCode).toBe(200)
 })
@@ -32,7 +32,7 @@ test('List all user cards filtered by deck', async () => {
   const { statusCode, body } = server.inject({
     method: 'GET',
     url: '/cards',
-    headers: buildHeaders(),
+    headers: buildAuthHeaders(),
   })
   expect(response.statusCode).toBe(200)
 })

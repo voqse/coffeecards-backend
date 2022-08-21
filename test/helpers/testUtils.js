@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken'
 
-// TODO: Convert into a fastify plugin
-export function buildHeaders(options = {}) {
-  // Definition of default values with what access will be granted
+export function buildAuthHeaders(options = {}) {
   // TODO: That options also need to be simplified
+  // Definition of default values with what access will be granted
   const {
     payload = {
       email: 'validuser@voqse.com',
