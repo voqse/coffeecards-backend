@@ -6,7 +6,7 @@ export const collectionSchema = new Schema({
     type: String,
     required: true,
   },
-  creatorId: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
