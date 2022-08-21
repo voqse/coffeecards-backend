@@ -20,6 +20,8 @@ async function authPlugin(fastify, options = {}) {
   //   }
   // })
 
+  let user
+
   fastify.addHook('onRequest', async (request, reply) => {
     const { authorization } = request.headers
 
@@ -39,7 +41,7 @@ async function authPlugin(fastify, options = {}) {
     }
 
     try {
-      const decoded = await jwt.verify(token, secret, jwtOptions)
+      user = await jwt.verify(token, secret, jwtOptions)
 
       // TODO: check if sub is valid mongoose.ObjectId
     } catch (error) {
@@ -47,6 +49,8 @@ async function authPlugin(fastify, options = {}) {
       throw new createError.Unauthorized()
     }
   })
+
+  fastify.decorateRequest('user', user)
 }
 
 export default fp(authPlugin)
