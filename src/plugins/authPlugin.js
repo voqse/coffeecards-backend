@@ -30,7 +30,7 @@ async function authPlugin(fastify, options = {}) {
     }
 
     try {
-      request.user = await jwt.verify(token, secret, jwtOpts) //?
+      request.user = await jwt.verify(token, secret, jwtOpts)
 
       // TODO: check if sub is valid mongoose.ObjectId
     } catch (error) {
