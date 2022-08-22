@@ -57,17 +57,79 @@ test('List all user cards filtered by collection', async () => {
 })
 
 test('Add a new card', async () => {
-  // todo
+  const { statusCode, body } = await server.inject({
+    method: 'POST',
+    url: '/cards/new',
+    headers: getAuthHeaders(),
+    payload: {
+      title: 'New card',
+      definition: 'New card description',
+      deckIds: ['62036476c2be0d3d427ad7cb'],
+    },
+  })
+
+  expect(statusCode).toBe(201)
 })
 
-test('Show the card', async () => {
-  // todo
+test('Show card', async () => {
+  const { statusCode, body } = await server.inject({
+    method: 'GET',
+    url: '/cards/61d5ef379dfea500eec5253d',
+    headers: getAuthHeaders(),
+  })
+  const data = JSON.parse(body)
+
+  expect(statusCode).toBe(200)
+  expect(data && typeof data === 'object').toBeTruthy()
+  expect(data.title).toBe('Card 1')
 })
 
-test('Edit the card', async () => {
-  // todo
+test('Show card which does not exist', async () => {
+  const { statusCode, body } = await server.inject({
+    method: 'GET',
+    url: '/cards/61d5ef379dfea505ecc5253d',
+    headers: getAuthHeaders(),
+  })
+  const data = JSON.parse(body)
+
+  expect(statusCode).toBe(404)
 })
 
-test('Remove the card', async () => {
-  // todo
+test('Edit card', async () => {
+  const { body: bodyOld } = await server.inject({
+    method: 'GET',
+    url: '/cards/61d5ef379dfea500eec5253d',
+    headers: getAuthHeaders(),
+  })
+  const dataOld = JSON.parse(bodyOld)
+
+  const { statusCode, body: bodyNew } = await server.inject({
+    method: 'PUT',
+    url: '/cards/61d5ef379dfea500eec5253d',
+    headers: getAuthHeaders(),
+    payload: {
+      title: 'Card 1 edited',
+    },
+  })
+  const dataNew = JSON.parse(bodyNew)
+
+  expect(statusCode).toBe(200)
+  expect(dataNew.title).toBe('Card 1 edited')
+  expect(dataNew.definition).toBe('Definition 1')
+})
+
+test('Remove card', async () => {
+  await server.inject({
+    method: 'DELETE',
+    url: '/cards/61d5ef379dfea500eec5253d',
+    headers: getAuthHeaders(),
+  })
+
+  const { statusCode } = await server.inject({
+    method: 'GET',
+    url: '/cards/61d5ef379dfea500eec5253d',
+    headers: getAuthHeaders(),
+  })
+
+  expect(statusCode).toBe(404)
 })

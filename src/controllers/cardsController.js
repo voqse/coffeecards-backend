@@ -1,3 +1,6 @@
+import createError from 'http-errors'
+import mongoose from 'mongoose'
+
 const cardItem = {
   type: 'object',
   properties: {
@@ -28,7 +31,7 @@ const cardSchema = {
 // const loginOpts = { schema: loginSchema }
 
 export default async function cardsController(fastify) {
-  const { Card } = fastify.mongoose.models
+  const { Card, Deck } = fastify.mongoose.models
 
   // List cards
   fastify.get('/', async (request, reply) => {
@@ -41,37 +44,62 @@ export default async function cardsController(fastify) {
     } else if (collectionId) {
       filter.collectionId = collectionId
     }
+    const cards = Card.find(filter)
 
-    return Card.find(filter)
+    if (!cards || cards.length === 0) {
+      throw new createError.NotFound('No cards found')
+    }
+
+    return cards
   })
 
   // Add card
   fastify.post('/new', async (request, reply) => {
     const { sub: userId } = request.user
-    const { deckIds } = request.body
-    const newCard = new Card({ ...request.body, userId })
+    const deck = await Deck.findOne({ deckIds: request.body.deckIds })
 
-    return reply.code(201).send(await newCard.save())
+    if (!deck) {
+      throw new createError.BadRequest('Provided deck does not exist')
+    }
+    const card = new Card({ ...request.body, userId })
+
+    return reply.code(201).send(card.save())
   })
 
   // Show one card
   fastify.get('/:id', async (request, reply) => {
     const { sub: userId } = request.user
-    return Card.findOne({ id: request.params.id, userId })
+    const card = await Card.findOne({ _id: request.params.id, userId })
+
+    if (!card) {
+      throw new createError.NotFound('Card not found')
+    }
+    return card
   })
 
   // Edit card
   fastify.put('/:id', async (request, reply) => {
     const { sub: userId } = request.user
-    return Card.findOneAndUpdate(
-      { id: request.params.id, userId },
+    const card = Card.findOneAndUpdate(
+      { _id: request.params.id, userId },
       request.body,
+      { new: true },
     )
+
+    if (!card) {
+      throw new createError.NotFound('Card not found')
+    }
+    return card
   })
 
   // Delete card
   fastify.delete('/:id', async (request, reply) => {
     const { sub: userId } = request.user
-    return Card.findOneAndRemove({ id: request.params.id, userId })
+    const card = Card.findOneAndDelete({ _id: request.params.id, userId })
+
+    if (!card) {
+      throw new createError.NotFound('Card not found')
+    }
+    return card
   })
 }
