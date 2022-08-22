@@ -1,26 +1,70 @@
+import createError from 'http-errors'
+
 export default async function collectionsController(fastify) {
-  // Implement list collections
+  const { Collection } = fastify.mongoose.models
+
+  // List cards
   fastify.get('/', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const filter = { userId: request.user.sub }
+    const collections = Deck.find(filter)
+
+    if (!collections || decks.length === 0) {
+      throw new createError.NotFound('No collections found')
+    }
+
+    return collections
   })
 
-  // Implement add collection
+  // Add card
   fastify.post('/new', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const collection = new Collection({
+      ...request.body,
+      userId: request.user.sub,
+    })
+
+    return reply.code(201).send(collection.save())
   })
 
-  // Implement list one collection
+  // Show one card
   fastify.get('/:id', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const collection = await Collection.findOne({
+      _id: request.params.id,
+      userId: request.user.sub,
+    })
+
+    if (!collection) {
+      throw new createError.NotFound('Collection not found')
+    }
+    return collection
   })
 
-  // Implement edit collection
+  // Edit card
   fastify.put('/:id', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const collection = Collection.findOneAndUpdate(
+      {
+        _id: request.params.id,
+        userId: request.user.sub,
+      },
+      request.body,
+      { new: true },
+    )
+
+    if (!collection) {
+      throw new createError.NotFound('Collection not found')
+    }
+    return collection
   })
 
-  // Implement delete collection
+  // Delete card
   fastify.delete('/:id', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const collection = Collection.findOneAndDelete({
+      _id: request.params.id,
+      userId: request.user.sub,
+    })
+
+    if (!collection) {
+      throw new createError.NotFound('Collection not found')
+    }
+    return collection
   })
 }

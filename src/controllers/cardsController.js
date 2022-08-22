@@ -35,12 +35,12 @@ export default async function cardsController(fastify) {
   // List cards
   fastify.get('/', async (request, reply) => {
     const filter = { userId: request.user.sub }
-    const { collection: collectionId, deck: deckIds } = request.query
+    const { collection, deck } = request.query
 
-    if (deckIds) {
-      filter.deckIds = deckIds
-    } else if (collectionId) {
-      filter.collectionId = collectionId
+    if (deck) {
+      filter.deckIds = deck
+    } else if (collection) {
+      filter.collectionId = collection
     }
     const cards = Card.find(filter)
 
@@ -79,7 +79,10 @@ export default async function cardsController(fastify) {
   // Edit card
   fastify.put('/:id', async (request, reply) => {
     const card = Card.findOneAndUpdate(
-      { _id: request.params.id, userId: request.user.sub },
+      {
+        _id: request.params.id,
+        userId: request.user.sub,
+      },
       request.body,
       { new: true },
     )

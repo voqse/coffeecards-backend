@@ -1,26 +1,79 @@
+import createError from 'http-errors'
+
 export default async function decksController(fastify) {
-  // Implement list decks
+  const { Deck, Collection } = fastify.mongoose.models
+
+  // List cards
   fastify.get('/', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const filter = { userId: request.user.sub }
+    const { collection } = request.query
+
+    if (collection) {
+      filter.collectionId = collection
+    }
+    const decks = Deck.find(filter)
+
+    if (!decks || decks.length === 0) {
+      throw new createError.NotFound('No decks found')
+    }
+
+    return decks
   })
 
-  // Implement add deck
+  // Add card
   fastify.post('/new', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const collection = await Collection.findOne({
+      collectionId: request.body.collectionId,
+    })
+
+    if (!collection) {
+      throw new createError.BadRequest('Provided collection does not exist')
+    }
+    const deck = new Deck({ ...request.body, userId: request.user.sub })
+
+    return reply.code(201).send(deck.save())
   })
 
-  // Implement list one deck
+  // Show one card
   fastify.get('/:id', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const deck = await Deck.findOne({
+      _id: request.params.id,
+      userId: request.user.sub,
+    })
+
+    if (!deck) {
+      throw new createError.NotFound('Deck not found')
+    }
+    return deck
   })
 
-  // Implement edit deck
+  // Edit card
   fastify.put('/:id', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const deck = Deck.findOneAndUpdate(
+      {
+        _id: request.params.id,
+        userId: request.user.sub,
+      },
+      request.body,
+      { new: true },
+    )
+
+    if (!deck) {
+      throw new createError.NotFound('Deck not found')
+    }
+    return deck
   })
 
-  // Implement delete deck
+  // Delete card
   fastify.delete('/:id', async (request, reply) => {
-    return reply.send({ it: 'Works' })
+    const deck = Deck.findOneAndDelete({
+      _id: request.params.id,
+      userId: request.user.sub,
+    })
+
+    if (!deck) {
+      throw new createError.NotFound('Deck not found')
+    }
+    return deck
   })
 }
