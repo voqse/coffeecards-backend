@@ -68,6 +68,9 @@ export default async function cardsController(fastify) {
     const card = await Card.findOne({
       _id: request.params.id,
       userId: request.user.sub,
+    }).populate({
+      path: 'deckIds',
+      populate: { path: 'collectionId' },
     })
 
     if (!card) {

@@ -39,6 +39,8 @@ export default async function decksController(fastify) {
     const deck = await Deck.findOne({
       _id: request.params.id,
       userId: request.user.sub,
+    }).populate({
+      path: 'collectionId',
     })
 
     if (!deck) {

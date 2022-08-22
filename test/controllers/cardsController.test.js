@@ -77,7 +77,7 @@ test('Show card', async () => {
     url: '/cards/61d5ef379dfea500eec5253d',
     headers: getAuthHeaders(),
   })
-  const data = JSON.parse(body)
+  const data = JSON.parse(body) //?
 
   expect(statusCode).toBe(200)
   expect(data && typeof data === 'object').toBeTruthy()
