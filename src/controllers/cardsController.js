@@ -1,5 +1,6 @@
 import createError from 'http-errors'
 
+// TODO: Add data validation and serialization
 const cardItem = {
   type: 'object',
   properties: {
