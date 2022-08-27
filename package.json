@@ -1,7 +1,7 @@
 {
   "name": "repeat-backend",
   "version": "1.0.0",
-  "description": "Backend server for Repeat project",
+  "description": "Fastify server for Repeat project",
   "main": "./src/index.js",
   "type": "module",
   "scripts": {
