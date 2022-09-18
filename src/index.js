@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import buildServer from './server.js'
 
 const config = {

@@ -5,9 +5,9 @@
   "main": "./src/index.js",
   "type": "module",
   "scripts": {
-    "server": "node ./src/index.js",
-    "dev": "cross-env NODE_ENV=development nodemon ./src/index.js",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules -r dotenv/config jest"
+    "server": "node -r dotenv/config ./src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon -r dotenv/config ./src/index.js",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --setupFiles dotenv/config"
   },
   "keywords": [],
   "author": "voqse",
