@@ -2,39 +2,47 @@ import mongoose from 'mongoose'
 import { cardSchema } from '../schemas/cardSchema.js'
 import { deckSchema } from '../schemas/deckSchema.js'
 import { collectionSchema } from '../schemas/collectionSchema.js'
+import createService from '../services/genericService.js'
 
 export default function createMongoProvider(options) {
-  const { uri, ...mongoOpts } = options || {}
+  const { uri, ...opts } = options || {}
 
   if (!uri) {
-    return new Error('You must define a URI')
+    return new Error('You must provide a URI')
   }
 
+  let services
   let connection
 
-  function get() {
-    return connection
-  }
-
   function connect() {
-    connection = mongoose.createConnection(uri, {
+    /** @type {ConnectOptions} */
+    const mongoOpts = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      ...mongoOpts,
-    })
+      ...opts,
+    }
 
-    const Card = connection.model('Card', cardSchema)
-    const Deck = connection.model('Deck', deckSchema)
-    const Collection = connection.model('Collection', collectionSchema)
+    connection = mongoose.createConnection(uri, mongoOpts)
+    services = {
+      card: createService(connection.model('Card', cardSchema)),
+      deck: createService(connection.model('Deck', deckSchema)),
+      collection: createService(
+        connection.model('Collection', collectionSchema),
+      ),
+    }
   }
 
   function close() {
     return connection.close()
   }
 
+  function getInstance() {
+    return services
+  }
+
   return {
-    get,
     connect,
     close,
+    getInstance,
   }
 }

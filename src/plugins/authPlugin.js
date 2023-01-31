@@ -9,12 +9,12 @@ async function authPlugin(fastify, options) {
   const { secret, ...jwtOpts } = options || {}
 
   if (!secret) {
-    return new Error('You must define a secret')
+    throw new Error('You must define a secret')
   }
 
   fastify.decorateRequest('user', null)
 
-  fastify.addHook('onRequest', async (request, reply) => {
+  fastify.addHook('onRequest', async (request) => {
     const { authorization } = request.headers
 
     if (!authorization) {

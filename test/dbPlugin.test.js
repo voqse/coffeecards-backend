@@ -2,7 +2,7 @@ import jest from 'jest-mock'
 import createServer from '../src/server.js'
 
 const provider = {
-  get: jest.fn(),
+  getInstance: jest.fn(),
   connect: jest.fn(),
   close: jest.fn(),
 }
