@@ -1,21 +1,21 @@
 import createError from 'http-errors'
 
 export default async function collectionsController(fastify) {
-  const { Collection } = fastify.mongoose.models
+  const { Collection } = fastify.db.models
 
-  // List cards
+  // List collections
   fastify.get('/', async (request, reply) => {
     const filter = { userId: request.user.sub }
-    const collections = Deck.find(filter)
+    const collections = Collection.find()
 
-    if (!collections || decks.length === 0) {
+    if (!collections || collections.length === 0) {
       throw new createError.NotFound('No collections found')
     }
 
     return collections
   })
 
-  // Add card
+  // Add collection
   fastify.post('/new', async (request, reply) => {
     const collection = new Collection({
       ...request.body,
@@ -25,7 +25,7 @@ export default async function collectionsController(fastify) {
     return reply.code(201).send(collection.save())
   })
 
-  // Show one card
+  // Show one collection
   fastify.get('/:id', async (request, reply) => {
     const collection = await Collection.findOne({
       _id: request.params.id,
@@ -38,7 +38,7 @@ export default async function collectionsController(fastify) {
     return collection
   })
 
-  // Edit card
+  // Edit collection
   fastify.put('/:id', async (request, reply) => {
     const collection = Collection.findOneAndUpdate(
       {
@@ -55,7 +55,7 @@ export default async function collectionsController(fastify) {
     return collection
   })
 
-  // Delete card
+  // Delete collection
   fastify.delete('/:id', async (request, reply) => {
     const collection = Collection.findOneAndDelete({
       _id: request.params.id,

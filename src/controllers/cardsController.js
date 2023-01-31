@@ -31,8 +31,6 @@ const cardSchema = {
 // const loginOpts = { schema: loginSchema }
 
 export default async function cardsController(fastify) {
-  const { Card, Deck } = fastify.mongoose.models
-
   // List cards
   fastify.get('/', async (request, reply) => {
     const filter = { userId: request.user.sub }
@@ -43,7 +41,8 @@ export default async function cardsController(fastify) {
     } else if (collection) {
       filter.collectionId = collection
     }
-    const cards = Card.find(filter)
+    // const cards = await fastify.db.getCards(filter)
+    const cards = ['hello']
 
     if (!cards || cards.length === 0) {
       throw new createError.NotFound('No cards found')
@@ -54,7 +53,8 @@ export default async function cardsController(fastify) {
 
   // Add card
   fastify.post('/new', async (request, reply) => {
-    const deck = await Deck.findOne({ deckIds: request.body.deckIds })
+    // const deck = await fastify.db.getDecks(request.body.deckIds)
+    const deck = ['deck']
 
     if (!deck) {
       throw new createError.BadRequest('Provided deck does not exist')

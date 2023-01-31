@@ -1,22 +1,21 @@
 import fastify from 'fastify'
 import authPlugin from './plugins/authPlugin.js'
-import mongoosePlugin from './plugins/mongoosePlugin.js'
+import dbPlugin from './plugins/dbPlugin.js'
 import router from './router.js'
+import createMongoProvider from './providers/mongoProvider.js'
+import { objectsMergeDeep } from './utils.js'
 
-export default function buildServer(options = {}) {
-  // TODO: Figure out what to do with all that nested options
-  const {
-    authOpts = {
-      secret: process.env.JWT_SECRET,
-      issuer: process.env.JWT_ISS,
-    },
-    mongooseOpts = {
-      uri: process.env.MONGODB_URI,
-    },
-    ...fastifyOpts
-  } = options
+const defaultOptions = {
+  auth: {
+    secret: process.env.JWT_SECRET,
+    issuer: process.env.JWT_ISS,
+  },
+  database: createMongoProvider({ uri: process.env.MONGODB_URI }),
+}
 
-  const server = fastify(fastifyOpts)
+export default function createServer(options) {
+  const optionsBase = objectsMergeDeep(defaultOptions, options || {})
+  const server = fastify(optionsBase)
 
   // Register middlewares
   // server.register(helmet)
@@ -27,8 +26,8 @@ export default function buildServer(options = {}) {
   //   secret: process.env.COOKIES_SECRET || 'you-must-define-a-secret', // for cookies signature
   //   // parseOptions: {}, // options for parsing cookies
   // })
-  server.register(authPlugin, authOpts)
-  server.register(mongoosePlugin, mongooseOpts)
+  server.register(authPlugin, optionsBase.auth)
+  server.register(dbPlugin, optionsBase)
   server.register(router)
 
   return server

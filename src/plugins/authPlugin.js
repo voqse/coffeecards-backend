@@ -5,8 +5,8 @@ import mongoose from 'mongoose'
 
 const { ObjectId } = mongoose.Types
 
-async function authPlugin(fastify, options = {}) {
-  const { secret, ...jwtOpts } = options
+async function authPlugin(fastify, options) {
+  const { secret, ...jwtOpts } = options || {}
 
   if (!secret) {
     return new Error('You must define a secret')

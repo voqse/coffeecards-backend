@@ -1,7 +1,7 @@
 import createError from 'http-errors'
 
 export default async function decksController(fastify) {
-  const { Deck, Collection } = fastify.mongoose.models
+  const { Deck, Collection } = fastify.db.models
 
   // List cards
   fastify.get('/', async (request, reply) => {

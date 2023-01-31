@@ -1,10 +1,13 @@
 import buildServer from '../src/server.js'
 import { getAuthHeaders } from './helpers/testUtils.js'
+import jest from 'jest-mock'
 
-const mongooseOpts = {
-  uri: process.env.MONGODB_URI + '-test',
+const provider = {
+  buildConnection: async () => ({
+    disconnect: jest.fn(),
+  }),
 }
-const server = buildServer({ mongooseOpts })
+const server = buildServer({ db: { provider } })
 
 beforeAll(async () => {
   await server.ready()

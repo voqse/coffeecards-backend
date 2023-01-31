@@ -7,8 +7,8 @@ export default async function router(fastify) {
   // /cards?collection=COLLECTION_SLUG
   // /cards?collection=COLLECTION_SLUG&practice=true
   // /cards?deck=DECK_SLUG
-  fastify.register(cardsController, { prefix: '/cards' })
+  // fastify.register(cardsController, { prefix: '/cards' })
   // /decks?collection=COLLECTION_SLUG
   fastify.register(decksController, { prefix: '/decks' })
-  fastify.register(collectionsController, { prefix: '/collections' })
+  // fastify.register(collectionsController, { prefix: '/collections' })
 }

@@ -1,18 +1,18 @@
-import buildServer from './server.js'
+import createServer from './server.js'
 
-const config = {
+const startOptions = {
   host: process.env.HOST || 'localhost',
   port: Number(process.env.PORT) || 5000,
 }
 
-const server = buildServer({
+const server = createServer({
   logger: process.env.NODE_ENV === 'development',
 })
 
 try {
-  await server.listen(config)
+  await server.listen(startOptions)
   console.log(
-    `repeat-backend is listening on http://${config.host}:${config.port}`,
+    `repeat-backend is listening on http://${startOptions.host}:${startOptions.port}`,
   )
 } catch (error) {
   server.log.error(error)
