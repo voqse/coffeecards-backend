@@ -1,15 +1,18 @@
 import createError from 'http-errors'
 
 export default async function decksController(fastify) {
+  const messages = {
+    notFound: 'Deck not found',
+  }
   const { deck, collection } = fastify.db
 
   // List decks
   fastify.get('/', async (request, reply) => {
     const filter = {
-      userId: request.user.sub,
       collectionId: request.query?.collection,
+      userId: request.user.sub,
     }
-    const decks = await deck.getAll(filter)
+    const decks = await deck.get(filter)
 
     if (!decks || decks.length === 0) {
       throw new createError.NotFound('No decks found')
@@ -45,7 +48,13 @@ export default async function decksController(fastify) {
 
   // Edit card
   fastify.put('/:id', async (request, reply) => {
-    const originalDeck = await deck.update(request.params.id, request.body)
+    const originalDeck = await deck.update(
+      {
+        _id: request.params.id,
+        userId: request.user.sub,
+      },
+      request.body,
+    )
 
     if (!originalDeck) {
       throw new createError.NotFound('Deck not found')
@@ -55,7 +64,10 @@ export default async function decksController(fastify) {
 
   // Delete card
   fastify.delete('/:id', async (request, reply) => {
-    const originalDeck = await deck.remove(request.params.id)
+    const originalDeck = await deck.remove({
+      _id: request.params.id,
+      userId: request.user.sub,
+    })
 
     if (!originalDeck) {
       throw new createError.NotFound('Deck not found')

@@ -1,10 +1,8 @@
-export default function createService(Model) {
-  function get(id) {
-    return Model.findById(id)
-  }
+import { isObject } from '../utils.js'
 
-  function getAll(filter) {
-    return Model.find(filter)
+export default function createService(Model) {
+  function get(filter) {
+    return isObject(filter) ? Model.find(filter) : Model.findById(filter)
   }
 
   function create(item) {
@@ -12,19 +10,20 @@ export default function createService(Model) {
     return newItem.save()
   }
 
-  function update(id, item) {
-    // TODO: Check user permission.
-    return Model.findByIdAndUpdate(id, item)
+  function update(filter, item) {
+    return isObject(filter)
+      ? Model.findOneAndUpdate(filter, item)
+      : Model.findByIdAndUpdate(filter, item)
   }
 
-  function remove(id) {
-    // TODO: Check user permission.
-    return Model.findByIdAndDelete(id)
+  function remove(filter) {
+    return isObject(filter)
+      ? Model.findOneAndRemove(filter)
+      : Model.findByIdAndRemove(filter)
   }
 
   return {
     get,
-    getAll,
     create,
     update,
     remove,
