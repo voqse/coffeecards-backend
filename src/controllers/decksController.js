@@ -1,18 +1,14 @@
 import createError from 'http-errors'
 
 export default async function decksController(fastify) {
-  const messages = {
-    notFound: 'Deck not found',
-  }
   const { deck, collection } = fastify.db
 
   // List decks
   fastify.get('/', async (request, reply) => {
-    const filter = {
+    const decks = await deck.get({
       collectionId: request.query?.collection,
       userId: request.user.sub,
-    }
-    const decks = await deck.get(filter)
+    })
 
     if (!decks || decks.length === 0) {
       throw new createError.NotFound('No decks found')
@@ -33,22 +29,25 @@ export default async function decksController(fastify) {
       userId: request.user.sub,
     })
 
-    return reply.code(201).send(newDeck.save())
+    return reply.code(201).send(newDeck)
   })
 
   // Show one deck
   fastify.get('/:id', async (request, reply) => {
-    const parentDeck = await deck.get(request.params.id)
+    const desiredDeck = await deck.get({
+      _id: request.params.id,
+      userId: request.user.sub,
+    })
 
-    if (!parentDeck) {
+    if (!desiredDeck) {
       throw new createError.NotFound('Deck not found')
     }
-    return parentDeck
+    return desiredDeck
   })
 
-  // Edit card
+  // Update deck
   fastify.put('/:id', async (request, reply) => {
-    const originalDeck = await deck.update(
+    const desiredDeck = await deck.update(
       {
         _id: request.params.id,
         userId: request.user.sub,
@@ -56,13 +55,13 @@ export default async function decksController(fastify) {
       request.body,
     )
 
-    if (!originalDeck) {
+    if (!desiredDeck) {
       throw new createError.NotFound('Deck not found')
     }
-    return originalDeck
+    return desiredDeck
   })
 
-  // Delete card
+  // Delete deck
   fastify.delete('/:id', async (request, reply) => {
     const originalDeck = await deck.remove({
       _id: request.params.id,
