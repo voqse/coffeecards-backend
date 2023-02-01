@@ -1,13 +1,9 @@
-import buildServer from '../src/server.js'
+import createServer from '../src/server.js'
+import { createMockDatabase } from './helpers/mockDb.js'
 import { getAuthHeaders } from './helpers/testUtils.js'
-import jest from 'jest-mock'
 
-const provider = {
-  buildConnection: async () => ({
-    disconnect: jest.fn(),
-  }),
-}
-const server = buildServer({ db: { provider } })
+const { database } = createMockDatabase()
+const server = createServer({ database })
 
 beforeAll(async () => {
   await server.ready()

@@ -13,7 +13,7 @@ async function dbPlugin(fastify, options) {
     await database.close()
   })
 
-  fastify.decorate('db', database.getInstance())
+  fastify.decorate('db', database.get())
 }
 
 export default fp(dbPlugin)

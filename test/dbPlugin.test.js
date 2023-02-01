@@ -1,12 +1,8 @@
-import jest from 'jest-mock'
 import createServer from '../src/server.js'
+import { createMockDatabase } from './helpers/mockDb.js'
 
-const provider = {
-  getInstance: jest.fn(),
-  connect: jest.fn(),
-  close: jest.fn(),
-}
-const server = createServer({ db: { provider } })
+const { database } = createMockDatabase()
+const server = createServer({ database })
 
 beforeAll(async () => {
   await server.ready()

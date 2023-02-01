@@ -2,7 +2,37 @@ import mongoose from 'mongoose'
 import { cardSchema } from '../schemas/cardSchema.js'
 import { deckSchema } from '../schemas/deckSchema.js'
 import { collectionSchema } from '../schemas/collectionSchema.js'
-import createService from '../services/genericService.js'
+import { isObject } from '../utils.js'
+
+export function createMongoService(Model) {
+  function get(filter) {
+    return isObject(filter) ? Model.find(filter) : Model.findById(filter)
+  }
+
+  function create(item) {
+    const newItem = new Model(item)
+    return newItem.save()
+  }
+
+  function update(filter, item) {
+    return isObject(filter)
+      ? Model.findOneAndUpdate(filter, item)
+      : Model.findByIdAndUpdate(filter, item)
+  }
+
+  function remove(filter) {
+    return isObject(filter)
+      ? Model.findOneAndRemove(filter)
+      : Model.findByIdAndRemove(filter)
+  }
+
+  return {
+    get,
+    create,
+    update,
+    remove,
+  }
+}
 
 export default function createMongoProvider(options) {
   const { uri, ...opts } = options || {}
@@ -24,9 +54,9 @@ export default function createMongoProvider(options) {
 
     connection = mongoose.createConnection(uri, mongoOpts)
     services = {
-      card: createService(connection.model('Card', cardSchema)),
-      deck: createService(connection.model('Deck', deckSchema)),
-      collection: createService(
+      card: createMongoService(connection.model('Card', cardSchema)),
+      deck: createMongoService(connection.model('Deck', deckSchema)),
+      collection: createMongoService(
         connection.model('Collection', collectionSchema),
       ),
     }
@@ -36,13 +66,13 @@ export default function createMongoProvider(options) {
     return connection.close()
   }
 
-  function getInstance() {
+  function get() {
     return services
   }
 
   return {
     connect,
     close,
-    getInstance,
+    get,
   }
 }
