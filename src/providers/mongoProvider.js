@@ -4,7 +4,7 @@ import { deckSchema } from '../schemas/deckSchema.js'
 import { collectionSchema } from '../schemas/collectionSchema.js'
 import { isObject } from '../utils.js'
 
-export function createMongoService(Model) {
+function createMongoService(Model) {
   function get(filter) {
     return isObject(filter) ? Model.find(filter) : Model.findById(filter)
   }
@@ -41,8 +41,8 @@ export default function createMongoProvider(options) {
     return new Error('You must provide a URI')
   }
 
-  let services
   let connection
+  let services
 
   function connect() {
     /** @type {ConnectOptions} */

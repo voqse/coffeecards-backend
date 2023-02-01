@@ -1,4 +1,4 @@
-import jest from 'jest-mock'
+import { jest } from '@jest/globals'
 
 function createService() {
   return {
@@ -9,7 +9,7 @@ function createService() {
   }
 }
 
-export function createMockDatabase() {
+export default function createMockDatabase() {
   const services = {
     card: createService(),
     deck: createService(),

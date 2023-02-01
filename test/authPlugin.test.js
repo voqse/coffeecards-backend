@@ -1,5 +1,6 @@
+import { test, expect, beforeAll, afterAll } from '@jest/globals'
 import createServer from '../src/server.js'
-import { createMockDatabase } from './helpers/mockDb.js'
+import createMockDatabase from './helpers/mockDb.js'
 import { getAuthHeaders } from './helpers/testUtils.js'
 
 const { database } = createMockDatabase()
