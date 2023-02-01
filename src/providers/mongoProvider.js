@@ -38,11 +38,11 @@ export default function createMongoProvider(options) {
   const { uri, ...opts } = options || {}
 
   if (!uri) {
-    return new Error('You must provide a URI')
+    throw new Error('You must provide a URI')
   }
 
+  const services = {}
   let connection
-  let services
 
   function connect() {
     /** @type {ConnectOptions} */
@@ -53,26 +53,23 @@ export default function createMongoProvider(options) {
     }
 
     connection = mongoose.createConnection(uri, mongoOpts)
-    services = {
-      card: createMongoService(connection.model('Card', cardSchema)),
-      deck: createMongoService(connection.model('Deck', deckSchema)),
-      collection: createMongoService(
-        connection.model('Collection', collectionSchema),
-      ),
-    }
+    services.card = createMongoService(connection.model('Card', cardSchema))
+    services.deck = createMongoService(connection.model('Deck', deckSchema))
+    services.collection = createMongoService(
+      connection.model('Collection', collectionSchema),
+    )
+    return self
   }
 
-  function close() {
-    return connection.close()
+  async function close() {
+    await connection.close()
+    return self
   }
 
-  function get() {
-    return services
-  }
-
-  return {
+  const self = {
     connect,
     close,
-    get,
+    services,
   }
+  return self
 }

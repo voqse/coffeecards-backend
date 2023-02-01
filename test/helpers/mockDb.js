@@ -17,7 +17,7 @@ export default function createMockDatabase() {
   }
 
   const database = {
-    get: () => services,
+    services,
     connect: jest.fn(),
     close: jest.fn(),
   }

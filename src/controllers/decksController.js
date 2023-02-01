@@ -1,7 +1,7 @@
 import createError from 'http-errors'
 
 export default async function decksController(fastify) {
-  const { deck, collection } = fastify.db
+  const { deck, collection } = fastify.db.services
 
   // List decks
   fastify.get('/', async (request, reply) => {
