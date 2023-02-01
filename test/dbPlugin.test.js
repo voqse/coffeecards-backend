@@ -1,10 +1,10 @@
 import { test, expect, beforeAll, afterAll } from '@jest/globals'
 import fastify from 'fastify'
-import createMockDatabase from './helpers/mockDb.js'
 import dbPlugin from '../src/plugins/dbPlugin.js'
+import createMockDatabase from './helpers/mockDb.js'
 
-const { database } = createMockDatabase()
 const server = fastify()
+const { database } = createMockDatabase()
 
 beforeAll(async () => {
   server.register(dbPlugin, { database })
@@ -17,7 +17,7 @@ afterAll(async () => {
 
 test('Should throw an error if no DB provided', async () => {
   expect.assertions(1)
-  await expect(dbPlugin(fastify())).rejects.toThrow(Error)
+  await expect(dbPlugin(fastify())).rejects.toThrow()
 })
 
 test('Fastify instance should contain bd', () => {

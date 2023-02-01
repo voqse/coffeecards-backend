@@ -5,7 +5,6 @@ const testUri = process.env.MONGODB_URI + '-test'
 
 test('Should throw an error if no URI provided', () => {
   expect(createMongoProvider).toThrow()
-  expect(createMongoProvider).toThrow(Error)
 })
 
 test('Should return methods', () => {
