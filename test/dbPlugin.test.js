@@ -1,17 +1,19 @@
-import { test, expect, beforeAll, afterAll } from '@jest/globals'
+import { test, expect, beforeEach, afterEach } from '@jest/globals'
 import fastify from 'fastify'
 import dbPlugin from '../src/plugins/dbPlugin.js'
 import createMockDatabase from './helpers/mockDb.js'
 
-const server = fastify()
-const { database } = createMockDatabase()
+let server
+let database
 
-beforeAll(async () => {
+beforeEach(async () => {
+  database = createMockDatabase().database
+  server = fastify()
   server.register(dbPlugin, { database })
   await server.ready()
 })
 
-afterAll(async () => {
+afterEach(async () => {
   await server.close()
 })
 
