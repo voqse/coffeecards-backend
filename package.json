@@ -1,5 +1,5 @@
 {
-  "name": "wisedonut-backend",
+  "name": "coffeecards-backend",
   "version": "1.0.0",
   "description": "Fastify server for Repeat project",
   "main": "./src/index.js",
