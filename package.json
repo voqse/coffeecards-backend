@@ -1,5 +1,5 @@
 {
-  "name": "repeat-backend",
+  "name": "wisedonut-backend",
   "version": "1.0.0",
   "description": "Fastify server for Repeat project",
   "main": "./src/index.js",

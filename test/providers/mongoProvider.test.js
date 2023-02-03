@@ -16,14 +16,24 @@ test('Should return methods', () => {
 })
 
 test('Should return services', () => {
-  const provider = createMongoProvider({ uri: testUri }).connect()
+  const { services } = createMongoProvider({ uri: testUri }).connect()
 
-  expect(provider.services).toHaveProperty('card')
-  expect(provider.services).toHaveProperty('deck')
-  expect(provider.services).toHaveProperty('collection')
+  expect(services).toHaveProperty('card')
+  expect(services).toHaveProperty('deck')
+  expect(services).toHaveProperty('collection')
 })
 
 test('Should close the connection', async () => {
   const provider = createMongoProvider({ uri: testUri }).connect()
+
   expect(await provider.close()).toBeTruthy()
 })
+
+// TODO ('get(filter) should return filtered items')
+// TODO ('get(id) should return one item by id')
+// TODO ('get(id) should return one item by id')
+// TODO ('create(item) should return created item')
+// TODO ('update(filter, item) should return updated item')
+// TODO ('update(id, item) should return updated item')
+// TODO ('remove(filter) should return removed item')
+// TODO ('remove(id) should return removed item')
