@@ -15,10 +15,10 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
-    "fastify": "^4.1.0",
+    "fastify": "^4.12.0",
     "fastify-plugin": "^3.0.1",
     "http-errors": "^2.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.5.3"
   },
   "devDependencies": {

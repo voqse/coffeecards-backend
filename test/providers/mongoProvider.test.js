@@ -19,6 +19,8 @@ describe('createMongoProvider', () => {
 
     await provider.connect()
     expect(mongoose.connections.length).toBe(lastConnectionsCount + 1)
+
+    await provider.close()
   })
 
   test('closes the connection', async () => {
@@ -31,11 +33,15 @@ describe('createMongoProvider', () => {
   })
 
   test('returns services', async () => {
-    const { services } = await createMongoProvider({ uri: testUri }).connect()
+    const { services, close } = await createMongoProvider({
+      uri: testUri,
+    }).connect()
 
     expect(services).toHaveProperty('card')
     expect(services).toHaveProperty('deck')
     expect(services).toHaveProperty('collection')
+
+    await close()
   })
 })
 
