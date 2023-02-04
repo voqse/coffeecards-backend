@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 import { cardSchema } from '../../src/schemas/cardSchema.js'
 import { mockCards } from '../helpers/mockData.js'
 
-const testUri = process.env.MONGODB_URI + '-test'
+const testUri = process.env.MONGODB_URI + '-provider-test'
 
 describe('createMongoProvider', () => {
   test('throws an error if no URI provided', () => {

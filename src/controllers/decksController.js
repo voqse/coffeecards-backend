@@ -4,29 +4,37 @@ export default async function decksController(fastify) {
   const { deck, collection } = fastify.db.services
 
   // List decks
-  fastify.get('/', async (request, reply) => {
-    const decks = await deck.get({
-      collectionId: request.query?.collection,
-      userId: request.user.sub,
-    })
-
-    if (!decks || decks.length === 0) {
-      throw new createError.NotFound('No decks found')
-    }
-
-    return decks
-  })
+  // fastify.get('/', async (request, reply) => {
+  //   const decks = await deck.get({
+  //     collectionId: request.query?.collection,
+  //     userId: request.user.sub,
+  //   })
+  //
+  //   if (!decks) {
+  //     throw new createError.NotFound('No decks found')
+  //   }
+  //
+  //   return decks
+  // })
 
   // Add deck
   fastify.post('/new', async (request, reply) => {
-    const parentCollection = await collection.get(request.body.collectionId)
+    const { collectionId } = request.params
+    const userId = request.user.sub
+
+    const parentCollection = await collection.get({
+      _id: collectionId,
+      userId,
+    })
 
     if (!parentCollection) {
-      throw new createError.BadRequest('Provided collection does not exist')
+      throw new createError.BadRequest('Collection not found')
     }
+
     const newDeck = await deck.create({
       ...request.body,
-      userId: request.user.sub,
+      collectionId,
+      userId,
     })
 
     return reply.code(201).send(newDeck)

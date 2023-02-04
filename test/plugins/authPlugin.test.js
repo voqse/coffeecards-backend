@@ -1,7 +1,7 @@
 import { test, expect, beforeEach, afterEach } from '@jest/globals'
 import fastify from 'fastify'
-import authPlugin from '../src/plugins/authPlugin.js'
-import { getAuthHeaders } from './helpers/testUtils.js'
+import authPlugin from '../../src/plugins/authPlugin.js'
+import { getAuthHeaders } from '../helpers/testUtils.js'
 
 let server
 

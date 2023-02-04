@@ -1,7 +1,7 @@
 import { test, expect, beforeEach, afterEach } from '@jest/globals'
 import fastify from 'fastify'
-import dbPlugin from '../src/plugins/dbPlugin.js'
-import createMockDatabase from './helpers/mockDb.js'
+import dbPlugin from '../../src/plugins/dbPlugin.js'
+import createMockDatabase from '../helpers/mockDb.js'
 
 let server
 let database

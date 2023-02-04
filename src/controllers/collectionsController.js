@@ -1,14 +1,17 @@
 import createError from 'http-errors'
 
+export async function checkOwnership(service, message) {}
+
 export default async function collectionsController(fastify) {
-  const { Collection } = fastify.db.models
+  const { collection } = fastify.db.services
 
   // List collections
   fastify.get('/', async (request, reply) => {
-    const filter = { userId: request.user.sub }
-    const collections = Collection.find()
+    const collections = await collection.get({
+      userId: request.user.sub,
+    })
 
-    if (!collections || collections.length === 0) {
+    if (!collections) {
       throw new createError.NotFound('No collections found')
     }
 
@@ -17,54 +20,53 @@ export default async function collectionsController(fastify) {
 
   // Add collection
   fastify.post('/new', async (request, reply) => {
-    const collection = new Collection({
+    const newCollection = await collection.create({
       ...request.body,
       userId: request.user.sub,
     })
 
-    return reply.code(201).send(collection.save())
+    return reply.code(201).send(newCollection)
   })
 
   // Show one collection
   fastify.get('/:id', async (request, reply) => {
-    const collection = await Collection.findOne({
+    const desiredCollection = await collection.get({
       _id: request.params.id,
       userId: request.user.sub,
     })
 
-    if (!collection) {
+    if (!desiredCollection) {
       throw new createError.NotFound('Collection not found')
     }
-    return collection
+    return desiredCollection
   })
 
-  // Edit collection
+  // Update collection
   fastify.put('/:id', async (request, reply) => {
-    const collection = Collection.findOneAndUpdate(
+    const desiredCollection = await collection.update(
       {
         _id: request.params.id,
         userId: request.user.sub,
       },
       request.body,
-      { new: true },
     )
 
-    if (!collection) {
+    if (!desiredCollection) {
       throw new createError.NotFound('Collection not found')
     }
-    return collection
+    return desiredCollection
   })
 
   // Delete collection
   fastify.delete('/:id', async (request, reply) => {
-    const collection = Collection.findOneAndDelete({
+    const originalCollection = await collection.remove({
       _id: request.params.id,
       userId: request.user.sub,
     })
 
-    if (!collection) {
+    if (!originalCollection) {
       throw new createError.NotFound('Collection not found')
     }
-    return collection
+    return originalCollection
   })
 }
