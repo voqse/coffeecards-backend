@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import { mockUsers } from './mockData.js'
 
 export function getAuthHeaders(options) {
   // TODO: That options also need to be simplified
@@ -12,7 +13,7 @@ export function getAuthHeaders(options) {
     secret = process.env.JWT_SECRET,
     issuer = process.env.JWT_ISSUER,
     expiresIn = process.env.ACCESS_TOKEN_TTL,
-    subject = '6202e612e83a8281862bfd84', // this should be changed to correct ObjectId
+    subject = mockUsers[0]._id, // this should be changed to correct ObjectId
   } = options || {}
 
   const token = jwt.sign(payload, secret, {

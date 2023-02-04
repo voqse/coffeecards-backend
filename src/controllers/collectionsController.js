@@ -29,17 +29,17 @@ export default async function collectionsController(fastify) {
   })
 
   // Show one collection
-  fastify.get('/:id', async (request, reply) => {
-    const desiredCollection = await collection.get({
-      _id: request.params.id,
-      userId: request.user.sub,
-    })
-
-    if (!desiredCollection) {
-      throw new createError.NotFound('Collection not found')
-    }
-    return desiredCollection
-  })
+  // fastify.get('/:id', async (request, reply) => {
+  //   const desiredCollection = await collection.get({
+  //     _id: request.params.id,
+  //     userId: request.user.sub,
+  //   })
+  //
+  //   if (!desiredCollection) {
+  //     throw new createError.NotFound('Collection not found')
+  //   }
+  //   return desiredCollection
+  // })
 
   // Update collection
   fastify.put('/:id', async (request, reply) => {

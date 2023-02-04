@@ -42,6 +42,12 @@ export const mockDecks = [
     userId: '6202e612e83a8281862bfd84',
     collectionId: '61d5ef379dfea500eec5253c',
   },
+  {
+    _id: '630267bb8792fd88da129669',
+    name: 'Deck 2',
+    userId: '6202e612e83a8281862bfd88',
+    collectionId: '61d5ef379dfea500eec5253c',
+  },
 ]
 
 export const mockCollections = [
@@ -50,16 +56,14 @@ export const mockCollections = [
     name: 'Collection 1',
     userId: '6202e612e83a8281862bfd84',
   },
+  {
+    _id: '61d5ef379dfea500eec5453c',
+    name: 'Collection 2',
+    userId: '6202e612e83a8281862bfd88',
+  },
 ]
 
-export async function insertMockData(mongoose) {
-  const { Card, Deck, Collection } = mongoose.models
-
-  await Card.insertMany(mockCards)
-  await Deck.insertMany(mockDecks)
-  await Collection.insertMany(mockCollections)
-}
-
-export async function clearMockData(mongoose) {
-  await mongoose.dropDatabase()
-}
+export const mockUsers = [
+  { _id: '6202e612e83a8281862bfd84' },
+  { _id: '6202e612e83a8281862bfd88' },
+]

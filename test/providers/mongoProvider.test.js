@@ -4,7 +4,7 @@ import createMongoProvider, {
 } from '../../src/providers/mongoProvider.js'
 import mongoose from 'mongoose'
 import { cardSchema } from '../../src/schemas/cardSchema.js'
-import { mockCards } from '../helpers/mockData.js'
+import { mockCards, mockUsers } from '../helpers/mockData.js'
 
 const testUri = process.env.MONGODB_URI + '-provider-test'
 
@@ -69,9 +69,10 @@ describe('createMongoService', () => {
   })
 
   test('gets items by filter', async () => {
-    const ownerId = '6202e612e83a8281862bfd84'
-    const filteredItems = mockCards.filter((card) => card.userId === ownerId)
-    const result = await service.get({ userId: ownerId })
+    const filteredItems = mockCards.filter(
+      (card) => card.userId === mockUsers[0]._id,
+    )
+    const result = await service.get({ userId: mockUsers[0]._id })
 
     expect(result.length).toBeLessThan(mockCards.length)
     expect(result.length).toBe(filteredItems.length)
@@ -81,7 +82,7 @@ describe('createMongoService', () => {
     const result = await service.create({
       title: 'New item',
       definition: 'With new definition',
-      userId: '6202e612e83a8281862bfd84',
+      userId: mockUsers[0]._id,
     })
 
     expect(result.title).toBe('New item')
@@ -101,7 +102,7 @@ describe('createMongoService', () => {
     const before = await service.update(
       {
         _id: '61d5ef379dfea550eec5253c',
-        userId: '6202e612e83a8281862bfd88',
+        userId: mockUsers[1]._id,
       },
       {
         title: 'Edited title',
@@ -123,7 +124,7 @@ describe('createMongoService', () => {
   test('does not remove item filtered by not matching owner', async () => {
     await service.remove({
       _id: mockCards[1]._id,
-      userId: '6202e612e83a8281862bfd88',
+      userId: mockUsers[1]._id,
     })
     const after = await service.get(mockCards[1]._id)
 

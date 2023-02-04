@@ -34,19 +34,18 @@ export default async function cardsController(fastify) {
   const { card, deck } = fastify.db.services
 
   // List cards
-  // fastify.get('/', async (request, reply) => {
-  // const { deckId } = request.params
-  //   const cards = await card.get({
-  //     deckIds: [deckId],
-  //     userId: request.user.sub,
-  //   })
-  //
-  //   if (!cards) {
-  //     throw new createError.NotFound('No cards found')
-  //   }
-  //
-  //   return cards
-  // })
+  fastify.get('/', async (request, reply) => {
+    const cards = await card.get({
+      deckIds: [request.params.deckId],
+      userId: request.user.sub,
+    })
+
+    if (!cards) {
+      throw new createError.NotFound('No cards found')
+    }
+
+    return cards
+  })
 
   // Add card
   fastify.post('/new', async (request, reply) => {
