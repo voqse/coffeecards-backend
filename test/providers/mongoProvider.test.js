@@ -97,9 +97,8 @@ describe('createMongoService', () => {
     expect(after.title).toBe('Edited title')
   })
 
-  test('returns null if strict filter', async () => {
-    const before = await service.get('61d5ef379dfea550eec5253c')
-    const after = await service.update(
+  test('does not update item filtered by not matching owner', async () => {
+    const before = await service.update(
       {
         _id: '61d5ef379dfea550eec5253c',
         userId: '6202e612e83a8281862bfd88',
@@ -108,12 +107,26 @@ describe('createMongoService', () => {
         title: 'Edited title',
       },
     )
+    const after = await service.get('61d5ef379dfea550eec5253c')
 
-    expect(before.title).not.toBe('Edited title')
+    expect(before).toBeFalsy()
+    expect(after.title).not.toBe('Edited title')
+  })
+
+  test('removes item by id', async () => {
+    await service.remove(mockCards[0]._id)
+    const after = await service.get(mockCards[0]._id)
+
     expect(after).toBeFalsy()
   })
 
-  // TODO ('update(id, item) should return updated item')
-  // TODO ('remove(filter) should return removed item')
-  // TODO ('remove(id) should return removed item')
+  test('does not remove item filtered by not matching owner', async () => {
+    await service.remove({
+      _id: mockCards[1]._id,
+      userId: '6202e612e83a8281862bfd88',
+    })
+    const after = await service.get(mockCards[1]._id)
+
+    expect(after).toBeTruthy()
+  })
 })
