@@ -16,8 +16,8 @@ export function createMongoService(Model) {
 
   function update(filter, item) {
     return isObject(filter)
-      ? Model.findOneAndUpdate(filter, item)
-      : Model.findByIdAndUpdate(filter, item)
+      ? Model.findOneAndUpdate(filter, item, { new: true })
+      : Model.findByIdAndUpdate(filter, item, { new: true })
   }
 
   function remove(filter) {

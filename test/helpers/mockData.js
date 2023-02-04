@@ -20,6 +20,13 @@ export const mockCards = [
     userId: '6202e612e83a8281862bfd84',
     deckIds: ['630267bb8792fd88da129662'],
   },
+  {
+    _id: '630267bb8792fd88da129668',
+    title: 'Card 4',
+    definition: 'Definition 4',
+    userId: '6202e612e83a8281862bfd88',
+    deckIds: ['630267bb8792fd88da129662'],
+  },
 ]
 
 export const mockDecks = [

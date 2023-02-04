@@ -19,7 +19,7 @@ afterEach(async () => {
   await server.close()
 })
 
-test('Get 401 when no token', async () => {
+test('401 when no token', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/test',
@@ -27,7 +27,7 @@ test('Get 401 when no token', async () => {
   expect(statusCode).toBe(401)
 })
 
-test('Get 401 when invalid token', async () => {
+test('401 when invalid token', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/test',
@@ -36,7 +36,7 @@ test('Get 401 when invalid token', async () => {
   expect(statusCode).toBe(401)
 })
 
-test('Get 401 when token expired', async () => {
+test('401 when token expired', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/test',
@@ -45,7 +45,7 @@ test('Get 401 when token expired', async () => {
   expect(statusCode).toBe(401)
 })
 
-test('Get 401 when token issuer is wrong', async () => {
+test('401 when token issuer is wrong', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/test',
@@ -54,7 +54,7 @@ test('Get 401 when token issuer is wrong', async () => {
   expect(statusCode).toBe(401)
 })
 
-test('Get 401 is subject is not valid ObjectId', async () => {
+test('401 is subject is not valid ObjectId', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/test',
@@ -63,7 +63,7 @@ test('Get 401 is subject is not valid ObjectId', async () => {
   expect(statusCode).toBe(401)
 })
 
-test('Get 200 if token valid', async () => {
+test('200 if token valid', async () => {
   const { statusCode } = await server.inject({
     method: 'GET',
     url: '/test',

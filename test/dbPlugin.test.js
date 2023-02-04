@@ -17,20 +17,20 @@ afterEach(async () => {
   await server.close()
 })
 
-test('Should throw an error if no DB provided', async () => {
+test('throws an error if no database provided', async () => {
   expect.assertions(1)
   await expect(dbPlugin(fastify())).rejects.toThrow()
 })
 
-test('Fastify instance should contain bd', () => {
+test('injects DB instance into server', () => {
   expect(server.db).toBeDefined()
 })
 
-test('DB should connect() on server start', () => {
+test('calls connect() on server start', () => {
   expect(database.connect.mock.calls.length).toBe(1)
 })
 
-test('DB should close() on server stop', async () => {
+test('calls close() on server stop', async () => {
   await server.close()
   expect(database.close.mock.calls.length).toBe(1)
 })
