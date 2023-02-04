@@ -4,14 +4,14 @@ export default async function decksController(fastify) {
   const { deck, collection } = fastify.db.services
 
   // List decks
-  fastify.get('/', async (request, reply) => {
+  fastify.get('/', async (request) => {
     const decks = await deck.get({
       collectionId: request.params.collectionId,
       userId: request.user.sub,
     })
 
     if (!decks) {
-      throw new createError.NotFound('No decks found')
+      throw new createError(404, 'No decks found')
     }
 
     return decks
@@ -28,7 +28,7 @@ export default async function decksController(fastify) {
     })
 
     if (!parentCollection) {
-      throw new createError.BadRequest('Collection not found')
+      throw new createError(404, 'Collection not found')
     }
 
     const newDeck = await deck.create({
@@ -54,7 +54,7 @@ export default async function decksController(fastify) {
   // })
 
   // Update deck
-  fastify.put('/:id', async (request, reply) => {
+  fastify.put('/:id', async (request) => {
     const desiredDeck = await deck.update(
       {
         _id: request.params.id,
@@ -64,7 +64,7 @@ export default async function decksController(fastify) {
     )
 
     if (!desiredDeck) {
-      throw new createError.NotFound('Deck not found')
+      throw new createError(404, 'Deck not found')
     }
     return desiredDeck
   })
@@ -77,7 +77,7 @@ export default async function decksController(fastify) {
     })
 
     if (!originalDeck) {
-      throw new createError.NotFound('Deck not found')
+      throw new createError(404, 'Deck not found')
     }
     return originalDeck
   })

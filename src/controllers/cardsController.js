@@ -1,31 +1,31 @@
 import createError from 'http-errors'
 
 // TODO: Add data validation and serialization
-const cardItem = {
-  type: 'object',
-  properties: {
-    title: {
-      type: 'string',
-    },
-    definition: {
-      type: 'string',
-    },
-    deckIds: {
-      type: 'array',
-      items: {
-        type: 'string',
-      },
-    },
-  },
-  required: ['title', 'definition', 'deckIds'],
-}
-
-const cardSchema = {
-  body: cardItem,
-  response: {
-    '2xx': cardItem,
-  },
-}
+// const cardItem = {
+//   type: 'object',
+//   properties: {
+//     title: {
+//       type: 'string',
+//     },
+//     definition: {
+//       type: 'string',
+//     },
+//     deckIds: {
+//       type: 'array',
+//       items: {
+//         type: 'string',
+//       },
+//     },
+//   },
+//   required: ['title', 'definition', 'deckIds'],
+// }
+//
+// const cardSchema = {
+//   body: cardItem,
+//   response: {
+//     '2xx': cardItem,
+//   },
+// }
 
 // const registerOpts = { schema: loginSchema }
 // const loginOpts = { schema: loginSchema }
@@ -41,7 +41,7 @@ export default async function cardsController(fastify) {
     })
 
     if (!cards) {
-      throw new createError.NotFound('No cards found')
+      throw new createError(404, 'No cards found')
     }
 
     return cards
@@ -58,7 +58,7 @@ export default async function cardsController(fastify) {
     })
 
     if (!parentDeck) {
-      throw new createError.BadRequest('Deck not found')
+      throw new createError(404, 'Deck not found')
     }
 
     const newCard = await card.create({
@@ -71,20 +71,20 @@ export default async function cardsController(fastify) {
   })
 
   // Show one card
-  fastify.get('/:id', async (request, reply) => {
+  fastify.get('/:id', async (request) => {
     const desiredCard = await card.get({
       _id: request.params.id,
       userId: request.user.sub,
     })
 
     if (!desiredCard) {
-      throw new createError.NotFound('Card not found')
+      throw new createError(404, 'Card not found')
     }
     return desiredCard
   })
 
   // Update deck
-  fastify.put('/:id', async (request, reply) => {
+  fastify.put('/:id', async (request) => {
     const desiredCard = await card.update(
       {
         _id: request.params.id,
@@ -94,20 +94,20 @@ export default async function cardsController(fastify) {
     )
 
     if (!desiredCard) {
-      throw new createError.NotFound('Card not found')
+      throw new createError(404, 'Card not found')
     }
     return desiredCard
   })
 
   // Delete deck
-  fastify.delete('/:id', async (request, reply) => {
+  fastify.delete('/:id', async (request) => {
     const originalCard = await card.remove({
       _id: request.params.id,
       userId: request.user.sub,
     })
 
     if (!originalCard) {
-      throw new createError.NotFound('Card not found')
+      throw new createError(404, 'Card not found')
     }
     return originalCard
   })

@@ -1,18 +1,16 @@
 import createError from 'http-errors'
 
-export async function checkOwnership(service, message) {}
-
 export default async function collectionsController(fastify) {
   const { collection } = fastify.db.services
 
   // List collections
-  fastify.get('/', async (request, reply) => {
+  fastify.get('/', async (request) => {
     const collections = await collection.get({
       userId: request.user.sub,
     })
 
     if (!collections) {
-      throw new createError.NotFound('No collections found')
+      throw new createError(404, 'No collections found')
     }
 
     return collections
@@ -42,7 +40,7 @@ export default async function collectionsController(fastify) {
   // })
 
   // Update collection
-  fastify.put('/:id', async (request, reply) => {
+  fastify.put('/:id', async (request) => {
     const desiredCollection = await collection.update(
       {
         _id: request.params.id,
@@ -52,20 +50,20 @@ export default async function collectionsController(fastify) {
     )
 
     if (!desiredCollection) {
-      throw new createError.NotFound('Collection not found')
+      throw new createError(404, 'Collection not found')
     }
     return desiredCollection
   })
 
   // Delete collection
-  fastify.delete('/:id', async (request, reply) => {
+  fastify.delete('/:id', async (request) => {
     const originalCollection = await collection.remove({
       _id: request.params.id,
       userId: request.user.sub,
     })
 
     if (!originalCollection) {
-      throw new createError.NotFound('Collection not found')
+      throw new createError(404, 'Collection not found')
     }
     return originalCollection
   })
