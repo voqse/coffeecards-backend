@@ -1,5 +1,6 @@
 import { test, expect } from '@jest/globals'
 import createMongoProvider from '../../src/providers/mongoProvider.js'
+import mongoose from 'mongoose'
 
 const testUri = process.env.MONGODB_URI + '-test'
 
@@ -7,26 +8,28 @@ test('Should throw an error if no URI provided', () => {
   expect(createMongoProvider).toThrow()
 })
 
-test('Should return methods', () => {
-  const provider = createMongoProvider({ uri: testUri }).connect()
+test('Should connect to DB', async () => {
+  const provider = createMongoProvider({ uri: testUri })
+  const prevConnNum = mongoose.connections.length
 
-  expect(typeof provider.connect).toBe('function')
-  expect(typeof provider.close).toBe('function')
-  expect(typeof provider.services).toBe('object')
+  await provider.connect()
+  expect(mongoose.connections.length).toBe(prevConnNum + 1)
 })
 
-test('Should return services', () => {
-  const { services } = createMongoProvider({ uri: testUri }).connect()
+test('Should close the connection', async () => {
+  const provider = await createMongoProvider({ uri: testUri }).connect()
+  const prevConnNum = mongoose.connections.length
+
+  await provider.close()
+  expect(mongoose.connections[prevConnNum - 1].readyState).toBe(0)
+})
+
+test('Should return services', async () => {
+  const { services } = await createMongoProvider({ uri: testUri }).connect()
 
   expect(services).toHaveProperty('card')
   expect(services).toHaveProperty('deck')
   expect(services).toHaveProperty('collection')
-})
-
-test('Should close the connection', async () => {
-  const provider = createMongoProvider({ uri: testUri }).connect()
-
-  expect(await provider.close()).toBeTruthy()
 })
 
 // TODO ('get(filter) should return filtered items')

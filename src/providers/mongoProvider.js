@@ -4,7 +4,7 @@ import { deckSchema } from '../schemas/deckSchema.js'
 import { collectionSchema } from '../schemas/collectionSchema.js'
 import { isObject } from '../utils.js'
 
-function createMongoService(Model) {
+export function createMongoService(Model) {
   function get(filter) {
     return isObject(filter) ? Model.find(filter) : Model.findById(filter)
   }
@@ -44,7 +44,7 @@ export default function createMongoProvider(options) {
   const services = {}
   let connection
 
-  function connect() {
+  async function connect() {
     /** @type {ConnectOptions} */
     const mongoOpts = {
       useNewUrlParser: true,
@@ -52,7 +52,8 @@ export default function createMongoProvider(options) {
       ...opts,
     }
 
-    connection = mongoose.createConnection(uri, mongoOpts)
+    connection = await mongoose.createConnection(uri, mongoOpts).asPromise()
+
     services.card = createMongoService(connection.model('Card', cardSchema))
     services.deck = createMongoService(connection.model('Deck', deckSchema))
     services.collection = createMongoService(

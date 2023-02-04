@@ -7,7 +7,7 @@ async function dbPlugin(fastify, options) {
     throw new Error('You must provide a database')
   }
 
-  database.connect()
+  await database.connect()
 
   fastify.addHook('onClose', async () => {
     await database.close()
