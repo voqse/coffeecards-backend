@@ -11,7 +11,7 @@ export default async function decksController(fastify) {
     })
 
     if (!decks) {
-      throw new createError(404, 'No decks found')
+      throw createError(404, 'No decks found')
     }
 
     return decks
@@ -28,7 +28,7 @@ export default async function decksController(fastify) {
     })
 
     if (!parentCollection) {
-      throw new createError(404, 'Collection not found')
+      throw createError(404, 'Collection not found')
     }
 
     const newDeck = await deck.create({
@@ -48,7 +48,7 @@ export default async function decksController(fastify) {
   //   })
   //
   //   if (!desiredDeck) {
-  //     throw new createError.NotFound('Deck not found')
+  //     throw createError.NotFound('Deck not found')
   //   }
   //   return desiredDeck
   // })
@@ -64,7 +64,7 @@ export default async function decksController(fastify) {
     )
 
     if (!desiredDeck) {
-      throw new createError(404, 'Deck not found')
+      throw createError(404, 'Deck not found')
     }
     return desiredDeck
   })
@@ -77,7 +77,7 @@ export default async function decksController(fastify) {
     })
 
     if (!originalDeck) {
-      throw new createError(404, 'Deck not found')
+      throw createError(404, 'Deck not found')
     }
     return originalDeck
   })

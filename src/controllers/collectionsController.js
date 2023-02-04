@@ -10,7 +10,7 @@ export default async function collectionsController(fastify) {
     })
 
     if (!collections) {
-      throw new createError(404, 'No collections found')
+      throw createError(404, 'No collections found')
     }
 
     return collections
@@ -34,7 +34,7 @@ export default async function collectionsController(fastify) {
   //   })
   //
   //   if (!desiredCollection) {
-  //     throw new createError.NotFound('Collection not found')
+  //     throw createError.NotFound('Collection not found')
   //   }
   //   return desiredCollection
   // })
@@ -50,7 +50,7 @@ export default async function collectionsController(fastify) {
     )
 
     if (!desiredCollection) {
-      throw new createError(404, 'Collection not found')
+      throw createError(404, 'Collection not found')
     }
     return desiredCollection
   })
@@ -63,7 +63,7 @@ export default async function collectionsController(fastify) {
     })
 
     if (!originalCollection) {
-      throw new createError(404, 'Collection not found')
+      throw createError(404, 'Collection not found')
     }
     return originalCollection
   })

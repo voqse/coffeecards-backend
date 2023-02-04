@@ -41,7 +41,7 @@ export default async function cardsController(fastify) {
     })
 
     if (!cards) {
-      throw new createError(404, 'No cards found')
+      throw createError(404, 'No cards found')
     }
 
     return cards
@@ -58,7 +58,7 @@ export default async function cardsController(fastify) {
     })
 
     if (!parentDeck) {
-      throw new createError(404, 'Deck not found')
+      throw createError(404, 'Deck not found')
     }
 
     const newCard = await card.create({
@@ -78,7 +78,7 @@ export default async function cardsController(fastify) {
     })
 
     if (!desiredCard) {
-      throw new createError(404, 'Card not found')
+      throw createError(404, 'Card not found')
     }
     return desiredCard
   })
@@ -94,7 +94,7 @@ export default async function cardsController(fastify) {
     )
 
     if (!desiredCard) {
-      throw new createError(404, 'Card not found')
+      throw createError(404, 'Card not found')
     }
     return desiredCard
   })
@@ -107,7 +107,7 @@ export default async function cardsController(fastify) {
     })
 
     if (!originalCard) {
-      throw new createError(404, 'Card not found')
+      throw createError(404, 'Card not found')
     }
     return originalCard
   })

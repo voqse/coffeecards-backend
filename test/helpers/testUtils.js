@@ -12,7 +12,7 @@ export function getAuthHeaders(options) {
     },
     secret = process.env.JWT_SECRET,
     issuer = process.env.JWT_ISSUER,
-    expiresIn = process.env.ACCESS_TOKEN_TTL,
+    expiresIn = process.env.ACCESS_TOKEN_TTL || '15m',
     subject = mockUsers[0]._id, // this should be changed to correct ObjectId
   } = options || {}
 
